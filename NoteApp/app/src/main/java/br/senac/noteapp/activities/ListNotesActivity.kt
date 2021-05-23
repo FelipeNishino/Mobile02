@@ -1,7 +1,9 @@
 package br.senac.noteapp.activities
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Button
@@ -34,30 +36,38 @@ class ListNotesActivity : AppCompatActivity() {
         binding.noteContainer.removeAllViews()
 
         val prefManager = PreferenceManager.getDefaultSharedPreferences(this)
-        val color = prefManager.getInt("noteColor", R.color.noteDefaultColor)
+        val textColor = prefManager.getInt("textColor", R.color.textDefaultColor)
+
+        val titleFontSize = prefManager.getString("title_font_size", "14")
+        val contentFontSize = prefManager.getString("content_font_size", "10")
 
         //Notes.noteList.forEach {
-        notes.forEach {
+        notes.forEach { note ->
             val cardBinding = NoteCardBinding.inflate(layoutInflater)
 
-            cardBinding.txtTitle.text = it.title
-            cardBinding.txtDesc.text = it.desc
-            cardBinding.txtUser.text = it.user
+            cardBinding.txtTitle.text = note.title
+            cardBinding.txtTitle.setTextColor(textColor)
+            cardBinding.txtTitle.textSize = titleFontSize?.toFloat() ?: 14F
+            cardBinding.txtDesc.text = note.desc
+            cardBinding.txtDesc.setTextColor(textColor)
+            cardBinding.txtDesc.textSize = contentFontSize?.toFloat() ?: 10F
+            cardBinding.txtUser.text = note.user
+            cardBinding.txtUser.setTextColor(textColor)
 
-            cardBinding.btnDelete.setOnClickListener { _ ->
+            cardBinding.btnDelete.setOnClickListener {
                 Thread {
                     val db = Room.databaseBuilder(this, AppDatabase::class.java, "db").build()
-                    db.noteDao().delete(it)
+                    db.noteDao().delete(note)
                     refreshNotes()
                 }.start()
             }
-            cardBinding.btnEdit.setOnClickListener { _ ->
+            cardBinding.btnEdit.setOnClickListener {
                 val intent = Intent(this,  EditNoteActivity::class.java)
-                intent.putExtra("note", it)
+                intent.putExtra("note", note)
                 startActivityForResult(intent,0)
             }
 
-            cardBinding.root.setCardBackgroundColor(color)
+            cardBinding.root.setCardBackgroundColor(note.color)
 
             binding.noteContainer.addView(cardBinding.root)
         }
@@ -80,7 +90,6 @@ class ListNotesActivity : AppCompatActivity() {
 
         }.start()
     }
-
 
     override fun onResume() {
         super.onResume()

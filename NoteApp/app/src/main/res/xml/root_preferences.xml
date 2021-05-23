@@ -9,6 +9,28 @@
             android:title="Note color">
 
         </com.jaredrummler.android.colorpicker.ColorPreferenceCompat>
+        <ListPreference
+            android:defaultValue="14"
+            android:entries="@array/fontSizes"
+            android:entryValues="@array/fontSizes"
+            android:key="title_font_size"
+            android:title="Title font size" />
+        <ListPreference
+            android:defaultValue="10"
+            android:entries="@array/fontSizes"
+            android:entryValues="@array/fontSizes"
+            android:key="content_font_size"
+            android:title="Content font size" />
+        <com.jaredrummler.android.colorpicker.ColorPreferenceCompat
+            android:id="@+id/colorPreferenceCompat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:defaultValue="@color/noteDefaultColor"
+            android:key="textColor"
+            android:summary="Pick a color"
+            android:title="Text color">
+
+        </com.jaredrummler.android.colorpicker.ColorPreferenceCompat>
     </PreferenceCategory>
 
 </PreferenceScreen>

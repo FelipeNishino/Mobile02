@@ -10,5 +10,6 @@ data class Note(
     var id : Int? = null,
     var title : String,
     var desc : String,
-    var user : String
+    var user : String,
+    var color : Int
 ) : Serializable
